@@ -32,10 +32,21 @@ closeBtn[0].addEventListener('click', closeModal);
 // Form Fields Validation - DOM Elements
 const firstName = document.getElementById('first');
 const lastName = document.getElementById('last');
-const email = document.getElementById('email');
+/*const email = document.getElementById('email');*/
 const tournamentsQuantity = document.getElementById('quantity');
 const locations = document.getElementById('locations');
 const termsChecked = document.getElementById('checkbox1');
+
+// Form Fields Validation - Error message
+const hideError = (elt) => {
+  const targetedElementParent = document.getElementById(elt).parentElement
+  targetedElementParent.setAttribute('data-error-visible', 'false')
+}
+const displayError = (elt) => {
+  const targetedElementParent = document.getElementById(elt).parentElement
+  targetedElementParent.setAttribute('data-error-visible', 'true')
+}
+
 
 // Names check
 function checkFirstName() {
@@ -58,60 +69,42 @@ function checkLastName() {
 
 lastName.addEventListener('input', checkLastName);
 
+// Email check
 document.querySelector('#email').addEventListener('input', function (e) {
   let entryValue = e.target.value;
   let inputId = e.target.id
 
   if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(entryValue)) {
-    hideError(inputId)
+    hideError(inputId);
   } else {
     displayError(inputId);
   }
 });
 
-const hideError = (elt) => {
-
-  const targetedElementParent = document.getElementById(elt).parentElement
-  targetedElementParent.setAttribute('data-error-visible', 'false')
-
-}
-
-const displayError = (elt) => {
-
-  const targetedElementParent = document.getElementById(elt).parentElement
-  targetedElementParent.setAttribute('data-error-visible', 'true')
-
-}
-
-
-
-/*// Email check
-function checkEmail() {
-  let emailFormat  = /^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/; // /^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/
-  if (email.value.trim().match(emailFormat)) {
-      email.parentElement.setAttribute('data-error-visible', 'false');
-  } else {
-    email.parentElement.setAttribute('data-error-visible', 'true');
-    email.style.border = '2px solid #e54858';
-  }
-}
-
-email.addEventListener('input', checkEmail);*/
-
 // Birthdate check
-function checkBirthdate() {
-  
-}
+document.querySelector('#birthdate').addEventListener('input', function (e) {
+  let date_regex = /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/([12]|[0-9]|[0-9]|[0-9])$/;
+  let entryDate = e.target.value;
+  let dateId = e.target.id;
+
+  if (date_regex.test(entryDate)) {
+    hideError(dateId);
+  } else {
+    displayError(dateId);
+  }
+});
 
 // Tournaments check
-function checkTournamentsQuantity() {
-  if (tournamentsQuantity.value.trim().length === 0 || isNaN(quantity.value.trim()) === true || quantity.value.trim() < 0) {
-    tournamentsQuantity.parentElement.setAttribute('data-error-visible', 'true');
-    tournamentsQuantity.style.border = '2px solid #e54858';
+document.querySelector('#quantity').addEventListener('input', function (e) {
+  let quantite = e.target.value;
+  let quantiteId = e.target.id;
+
+  if (quantite < 0 || quantite > 99) {
+    displayError(quantiteId);
   } else {
-    tournamentsQuantity.parentElement.setAttribute('data-error-visible', 'false');
+    hideError(quantiteId);
   }
-}
+});
 
 // Locations check
 function checkLocations() {
